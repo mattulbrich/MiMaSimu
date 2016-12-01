@@ -38,6 +38,7 @@ public class PreProcessor implements ProcessingActivity {
             }
         }
         final List<String> newFile = new LinkedList<String>();
+        newFile.add("start 0x" + Integer.toHexString(variables.get("START")));
         fileIterator = preFile.iterator();
         lineNum = 0;
         while (fileIterator.hasNext()) {

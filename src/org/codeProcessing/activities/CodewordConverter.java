@@ -34,6 +34,8 @@ public class CodewordConverter implements ProcessingActivity {
         final List<String> file = input.getFile();
         final List<String> noUnnecessaryFile = new LinkedList<String>();
         Iterator<String> fileIterator = file.iterator();
+        // Jump over start instruction
+        noUnnecessaryFile.add(fileIterator.next());
         while (fileIterator.hasNext()) {
             final String line = fileIterator.next();
             final Matcher matcher = unnecessaryPattern.matcher(line);
@@ -43,6 +45,8 @@ public class CodewordConverter implements ProcessingActivity {
         }
         final List<String> newFile = new LinkedList<String>();
         fileIterator = noUnnecessaryFile.iterator();
+        // Jump over start instruction
+        newFile.add(fileIterator.next());
         while (fileIterator.hasNext()) {
             String line = fileIterator.next();
             if (line.trim().equals("")) {
