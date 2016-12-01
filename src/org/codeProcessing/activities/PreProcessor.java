@@ -13,7 +13,7 @@ import org.codeProcessing.ProcessingDataCollection;
 
 public class PreProcessor implements ProcessingActivity {
 
-    private static String variableRegex = "^\\s*0x([0-9a-fA-F]{1,5})\\s+([A-Z_]+)\\s+([A-Z]+(\\s+[A-Z_0-9x]+)?)(\\s+;.*)?";
+    private static String variableRegex = "^\\s*0x([0-9a-fA-F]{1,5})\\s+([A-Z_]+)(\\s+([A-Z]+)?(\\s+[A-Z_0-9x]+)?)(\\s+;.*)?\\s*$";
     private static Pattern variablePattern = Pattern.compile(variableRegex);
 
     @Override
@@ -30,7 +30,7 @@ public class PreProcessor implements ProcessingActivity {
             final Matcher matcher = variablePattern.matcher(line);
             if (matcher.matches() && !input.isKeyword(matcher.group(2))) {
                 // System.out.println(matcher.group(1));
-                preFile.add("0x" + matcher.group(1) + " " + matcher.group(3));
+                preFile.add("0x" + matcher.group(1) + " " + matcher.group(4));
                 variables.put(matcher.group(2), Integer.parseInt(matcher.group(1), 16));
             } else {
                 // System.out.println("No match found:" + line);
@@ -38,7 +38,11 @@ public class PreProcessor implements ProcessingActivity {
             }
         }
         final List<String> newFile = new LinkedList<String>();
-        newFile.add("start 0x" + Integer.toHexString(variables.get("START")));
+        if (variables.containsKey("START")) {
+            newFile.add("start 0x" + Integer.toHexString(variables.get("START")));
+        } else {
+            newFile.add("start 0x0");
+        }
         fileIterator = preFile.iterator();
         lineNum = 0;
         while (fileIterator.hasNext()) {
