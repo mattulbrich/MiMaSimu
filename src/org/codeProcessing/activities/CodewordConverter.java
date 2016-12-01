@@ -66,7 +66,7 @@ public class CodewordConverter implements ProcessingActivity {
                     line = "0x" + curCommand.group(1) + " 0x"
                             + Integer.toHexString(commandCode + Integer.parseInt(curCommand.group(4), 16));
                 } else {
-                    line = curCommand.group(1) + " 0x" + Integer.toHexString(commandCode);
+                    line = "0x" + curCommand.group(1) + " 0x" + Integer.toHexString(commandCode);
                 }
                 // System.out.println(line);
             } else {
