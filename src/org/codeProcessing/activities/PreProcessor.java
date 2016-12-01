@@ -30,7 +30,7 @@ public class PreProcessor implements ProcessingActivity {
             final Matcher matcher = variablePattern.matcher(line);
             if (matcher.matches() && !input.isKeyword(matcher.group(2))) {
                 // System.out.println(matcher.group(1));
-                preFile.add("0x" + matcher.group(1) + " " + matcher.group(4));
+                preFile.add("0x" + matcher.group(1) + " " + matcher.group(3));
                 variables.put(matcher.group(2), Integer.parseInt(matcher.group(1), 16));
             } else {
                 // System.out.println("No match found:" + line);
