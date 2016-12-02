@@ -39,10 +39,37 @@ java -classpath bin org.Mima
 
 ## General instructions
 The internal memory can be edited by clicking the edit memory button.
-Memory images with the extension ".mima" or ".mem" can be load by use of the "load memory" button or by passing the file as command line argument.
+One can load MiMa-Assembly-Code by either passing the file as command line argument or by the use of the "load assembly" button.
 
-double slashes "//" can be used to add command lines to memory files.
+### Assembly notation
+#### Numbers
+All numbers are being notated in HEX-Code
+#### Memory Addresses
+The address of the next upcoming line can be declared by the ```*=``` operator:
+```
+*=0x80 ;LDC 0x40 will be stored at address 0x80 in memory
+LDC 0x40
+```
+#### Address Macros
+One can name memory address so that a later referal is possible. The name of the memory address may only contain ```[A-Z_]```
+If the address is not being used for a command one must add ```DS``` to clarify the declaration
+```
+*=0x80
+VAR_1   DS  ;one can now refer to 0x80 by writing VAR_1
+VAR_2   LDC 0x42    ;one can now refer to (and even jump to) VAR_2 (will be replaced by 0x81)
+```
+#### Entry point
+The first storage cell with the first operation of the program must be named ```START```:
+```
+START   LDC 0x1 ;First command to be executed (=entry point)
+```
 
+#### Comments
+Semicolons ";" can be used to add comments to files
+#### Other
+Have another look at the notes about memory notation and the MIMA architecture
+### Memory Notation
+In Memory notation "//" can be used to add comments.
 commands as well as values can be stored at a specific address by just typing the address before the value:
 ```
 0x00002 42 //value 42 at address 0x2
