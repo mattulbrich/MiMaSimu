@@ -15,6 +15,7 @@ A Simulator for the minimal machine (taught at the kit in Karlsruhe, Germany, se
    * [Instruction set](#instruction set)
      * [Instruction format](#instruction-format)
      * [Op-Codes](#op-codes)
+ * [Example program](#example-program)
  * [Other stuff](#other-stuff)
 
 ## Compile instructions
@@ -163,6 +164,24 @@ F3 - FF	|		| free
 * Bits shifted out right within a __RAR__ command will be pushed in at the left.
 * The instruction __JMS target__ saves the address of the succeeding instruction (return address) to the address given by target and initiates a jump to target + 1.
 * __JIND target__ initiates a jump to the address which is stored at the target address. (Jmp <target>)
+
+## Example Program
+```
+*=0x70
+VAR0	DS		;one can now refer to 0x80 by writing VAR_1
+VAR1	DS
+
+*=0x80			;LDC 0x42 will be stored at address 0x80 in memory
+POS1	LDC 0x42
+	ADD VAR1
+	HALT
+START   LDC 0x1		;First command to be executed (=entry point)
+	STV VAR0
+	LDC 0x2
+	ADD VAR0
+	STV 0x71
+	JMP POS1
+```
 
 ## Other stuff
 Give a look at the MIMA simulator (mimasim) and assambler (mimasm) by cbdev: https://github.com/cbdevnet/mima/
