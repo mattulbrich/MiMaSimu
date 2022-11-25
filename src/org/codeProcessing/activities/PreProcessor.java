@@ -13,7 +13,7 @@ import org.codeProcessing.ProcessingDataCollection;
 
 public class PreProcessor implements ProcessingActivity {
 
-    private static String variableRegex = "^\\s*0x([0-9a-fA-F]{1,5})\\s+([A-Z_]+)(\\s+([A-Z]+)?(\\s+[A-Z_0-9x]+)?)(\\s+;.*)?\\s*$";
+    private static String variableRegex = "^\\s*0x([0-9a-fA-F]{1,5})\\s+([A-Za-z_0-9]+)(\\s+([A-Z]+)?(\\s+[A-Z_0-9x]+)?)(\\s+;.*)?\\s*$";
     private static Pattern variablePattern = Pattern.compile(variableRegex);
 
     @Override

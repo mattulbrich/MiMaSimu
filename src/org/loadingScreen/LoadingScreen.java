@@ -9,8 +9,6 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sun.awt.AWTUtilities;
-
 public class LoadingScreen extends JFrame {
 
     private static final long serialVersionUID = -2368849047541331782L;
@@ -33,7 +31,7 @@ public class LoadingScreen extends JFrame {
         // again adding the JRE System Library to the build path
         // See:
         // http://stackoverflow.com/questions/860187/access-restriction-on-class-due-to-restriction-on-required-library-rt-jar
-        AWTUtilities.setWindowOpaque(this, false);
+        // AWTUtilities.setWindowOpaque(this, false);
         // setOpacity(1);
         coCa = new ColorCalculator(this, 50);
 

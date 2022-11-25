@@ -60,13 +60,14 @@ public class Controller {
         // Ignore file ending since it should be the choice of the user
         // if ((args.length > 0)
         // && (args[0].endsWith(".mima") || args[0].endsWith(".mem"))) {
-        final File input = new File(args[0]);
-        if (input.exists()) {
-            loadMem(input);
-        } else {
-            System.err.println("File doesn't exist!");
+        if (args.length > 0) {
+            final File input = new File(args[0]);
+            if (input.exists()) {
+                loadMem(input);
+            } else {
+                System.err.println("File doesn't exist!");
+            }
         }
-        // }
 
         gui = new GUI(this);
         initMima();
