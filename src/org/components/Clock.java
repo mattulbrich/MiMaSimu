@@ -6,11 +6,14 @@ public class Clock implements Runnable {
 	private boolean paused;
 	private boolean stopped;
 
+	private boolean runMacro;
+
 	public Clock(int timeout, SW sw) {
 		this.timeout = timeout;
 		this.sw = sw;
 		this.stopped = true;
 		this.paused = false;
+		this.runMacro = false;
 	}
 
 	@Override
@@ -27,6 +30,14 @@ public class Clock implements Runnable {
 				sleep(timeout / 2);
 				sw.clockOff();
 				sleep(timeout / 2);
+			} else if (runMacro) {
+				do {
+					sw.clock();
+					sleep(timeout / 2);
+					sw.clockOff();
+					sleep(timeout / 2);
+				} while (!sw.isNextMicroZero());
+				this.runMacro = false;
 			} else
 				sleep(100);
 		}
@@ -34,6 +45,10 @@ public class Clock implements Runnable {
 
 	public void pause(boolean value) {
 		this.paused = value;
+	}
+
+	public void runMacroStep() {
+		this.runMacro = true;
 	}
 
 	public void stop() {

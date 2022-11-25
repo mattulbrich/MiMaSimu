@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.Controller;
 import org.external.Memory;
 
+import static java.lang.Thread.sleep;
+
 public class SW {
 
 	private ACC akku;
@@ -46,6 +48,10 @@ public class SW {
 	public void clock() {
 		interpret();
 		controller.clock(true);
+	}
+
+	public boolean isNextMicroZero() {
+		return next == 0x00 || next == 0x5A;
 	}
 
 	public void clockOff() {

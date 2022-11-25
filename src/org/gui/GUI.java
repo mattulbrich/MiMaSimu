@@ -427,13 +427,24 @@ public class GUI extends JFrame {
 
             @Override
             public void actionPerformed(final ActionEvent arg0) {
-                controller.manualClock();
+                controller.manualMacroClock();
             }
         });
         buttons.put("step", tmp);
 
-        tmp = new JButton("edit memory");
+        tmp = new JButton("micro step");
         tmp.setLocation(35, 190);
+        tmp.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent arg0) {
+                controller.manualClock();
+            }
+        });
+        buttons.put("micro step", tmp);
+
+        tmp = new JButton("edit memory");
+        tmp.setLocation(35, 230);
         tmp.addActionListener(new ActionListener() {
 
             @Override
@@ -444,7 +455,7 @@ public class GUI extends JFrame {
         buttons.put("edtMem", tmp);
 
         tmp = new JButton("load assembly");
-        tmp.setLocation(35, 230);
+        tmp.setLocation(35, 270);
         tmp.addActionListener(new ActionListener() {
 
             @Override
@@ -486,7 +497,7 @@ public class GUI extends JFrame {
         buttons.put("loadMem", tmp);
 
         tmp = new JButton("save memory");
-        tmp.setLocation(35, 270);
+        tmp.setLocation(35, 310);
         tmp.addActionListener(new ActionListener() {
 
             @Override
@@ -530,7 +541,7 @@ public class GUI extends JFrame {
         buttons.put("saveMem", tmp);
 
         tmp = new JButton("save result");
-        tmp.setLocation(35, 310);
+        tmp.setLocation(35, 350);
         tmp.addActionListener(new ActionListener() {
 
             @Override

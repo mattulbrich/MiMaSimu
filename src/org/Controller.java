@@ -148,6 +148,10 @@ public class Controller {
         clock(false);
     }
 
+    public void manualMacroClock() {
+        clock.runMacroStep();
+    }
+
     /**
      * toggle pause
      * 
