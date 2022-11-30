@@ -42,7 +42,7 @@ public class GUI extends JFrame {
 
     private static final long serialVersionUID = -4470963446194084878L;
 
-    public static final String OPCODES[] = {"LDC", "DS", "LDV", "STV", "ADD", "AND",
+    public static final String OPCODES[] = {"LDC", "LDV", "STV", "ADD", "AND",
             "OR", "XOR", "EQL", "JMP", "JMN", "LDIV", "STIV", "JMS", "JIND" };
 
     private Controller controller;
@@ -64,8 +64,6 @@ public class GUI extends JFrame {
 
     private final Color backgroundColor = new Color(255, 255, 255, 255);
     private final Color activeColor = new Color(0, 0x90, 0xFF, 255);
-
-    private final Color iarColor = new Color(0x80, 0xc0, 0x80, 255);
     private final Color borderColor = new Color(0, 0, 0, 255);
 
     /**
