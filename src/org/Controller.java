@@ -47,6 +47,10 @@ public class Controller {
     private final GUI gui;
     private final LoadingScreen ls;
 
+    private boolean auto_run;
+    private int mem_start;
+    private int mem_end;
+
     /**
      * Creates a new Controller
      * 
@@ -68,15 +72,45 @@ public class Controller {
                 System.err.println("File doesn't exist!");
             }
         }
+        auto_run = false;
+        mem_start = 0;
+        mem_end = 0;
+        if (args.length > 1) {
+            assert args.length>2;
+            auto_run=true;
+            mem_start = Integer.decode(args[1]);
+            mem_end = Integer.decode(args[2]);
+        }
 
-        gui = new GUI(this);
+        if (!auto_run) {
+            gui = new GUI(this);
+        } else {
+            gui = null;
+        }
         initMima();
         ls.stop();
-        gui.setVisible(true);
+        if (!auto_run) {
+            gui.setVisible(true);
+            clock = new Clock(500, sw);
+            clock.pause(true);
+        } else {
+            clock = new Clock(0, sw);
+            clock.pause(false);
+        }
 
-        clock = new Clock(500, sw);
-        clock.pause(true);
-        new Thread(clock).start();
+        Thread compute_thread = new Thread(clock);
+        compute_thread.start();
+        if (auto_run) {
+            try {
+                compute_thread.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            for (int i = mem_start; i <= mem_end; i++) {
+                System.out.print("0x"+String.format("%05X: ", i));
+                System.out.println("0x"+String.format("%06X", speicher.getMemory().getOrDefault(i, 0)));
+            }
+        }
     }
 
     private void initMima() {
@@ -96,9 +130,11 @@ public class Controller {
 
         iar.set(speicher.getStartPoint());
 
-        gui.setStatus(false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-                false, 0);
-        gui.setValues(0, 0, 0, 0, 0, 0, 0, 0, 0, speicher.getMemory());
+        if (!auto_run) {
+            gui.setStatus(false, false, false, false, false, false, false, false, false, false, false, false, false, false,
+                    false, 0);
+            gui.setValues(0, 0, 0, 0, 0, 0, 0, 0, 0, speicher.getMemory());
+        }
     }
 
     /**
@@ -124,7 +160,7 @@ public class Controller {
     public void setStatus(final boolean Ar, final boolean Aw, final boolean RX, final boolean RY, final boolean RZ,
             final boolean E, final boolean Pr, final boolean Pw, final boolean Ir, final boolean Iw, final boolean Dr,
             final boolean Dw, final boolean S, final boolean R, final boolean W, final int c) {
-
+        if (auto_run) { return; }
         gui.setValues(akku.getValue(), c, iar.getValue(), ir.getValue(), sar.getValue(), sdr.getValue(), x.getValue(),
                 y.getValue(), z.getValue(), speicher.getMemory());
         gui.setStatus(Ar, Aw, RX, RY, RZ, E, Pr, Pw, Ir, Iw, Dr, Dw, S, R, W, c);
@@ -137,6 +173,7 @@ public class Controller {
      *            whether the clock is active or not
      */
     public void clock(final boolean active) {
+        if (auto_run) { return; }
         gui.clock(active);
     }
 
@@ -160,7 +197,11 @@ public class Controller {
      */
     public void pause(final boolean state) {
         clock.pause(state);
-        gui.pause(state);
+        if (auto_run) {
+            if (state) {clock.stop();}
+        } else {
+            gui.pause(state);
+        }
     }
 
     /**
@@ -168,7 +209,9 @@ public class Controller {
      */
     public void reset() {
         clock.pause(true);
-        gui.deleteValues(speicher.getMemory());
+        if (!auto_run) {
+            gui.deleteValues(speicher.getMemory());
+        }
         initMima();
         clock.setSW(sw);
 
