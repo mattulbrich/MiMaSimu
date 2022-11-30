@@ -37,16 +37,6 @@ public class WorkflowControl {
         final Iterator<ProcessingActivity> activityIterator = activitiesOrdered.iterator();
         while (activityIterator.hasNext()) {
             this.data = activityIterator.next().processDataObject(this.data);
-            final List<String> file = this.data.getFile();
-            final Iterator<String> fileIterator = file.iterator();
-            while (fileIterator.hasNext()) {
-                System.out.println(fileIterator.next());
-            }
-        }
-        final List<String> file = this.data.getFile();
-        final Iterator<String> fileIterator = file.iterator();
-        while (fileIterator.hasNext()) {
-            System.out.println(fileIterator.next());
         }
         return this.data.getFile();
     }
