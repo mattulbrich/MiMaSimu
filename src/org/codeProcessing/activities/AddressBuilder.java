@@ -17,6 +17,9 @@ public class AddressBuilder implements ProcessingActivity {
     private static String addressRegex = "^\\s*\\*=\\s*0x([0-9a-fA-F]+)\\s*;?.*";
     private static Pattern addressPattern = Pattern.compile(addressRegex);
 
+    private static String commentOrEmpty = "^\\s*(;.*)?";
+    private static Pattern commentOrEmptyPattern = Pattern.compile(commentOrEmpty);
+
     @Override
     public ProcessingDataCollection processDataObject(final ProcessingDataCollection inputParam) {
         final Map<Integer, Boolean> spaceUsed = new HashMap<Integer, Boolean>();
@@ -27,8 +30,12 @@ public class AddressBuilder implements ProcessingActivity {
         int curAddress = 0;
         int lineNum = 0;
         while (fileIterator.hasNext()) {
-            lineNum++;
             final String line = fileIterator.next();
+            if (commentOrEmptyPattern.matcher(line).matches()) {
+                // ignore comments and empty lines
+                continue;
+            }
+            lineNum++;
             final Matcher matcher = addressPattern.matcher(line);
             if (matcher.matches()) {
                 try {

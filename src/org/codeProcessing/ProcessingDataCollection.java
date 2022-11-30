@@ -24,6 +24,7 @@ public class ProcessingDataCollection {
         this.data = new HashMap<String, Object>();
         codewords = new HashMap<String, Integer>();
         codewords.put("LDC", 0x000000);
+        codewords.put("DS", 0x000000);
         codewords.put("LDV", 0x100000);
         codewords.put("STV", 0x200000);
         codewords.put("ADD", 0x300000);
