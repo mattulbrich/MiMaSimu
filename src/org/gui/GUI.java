@@ -45,7 +45,6 @@ public class GUI extends JFrame {
     public static final String OPCODES[] = {"LDC", "DS", "LDV", "STV", "ADD", "AND",
             "OR", "XOR", "EQL", "JMP", "JMN", "LDIV", "STIV", "JMS", "JIND" };
 
-
     private Controller controller;
     private JPanel content;
     private JPanel dataContent;
@@ -61,9 +60,12 @@ public class GUI extends JFrame {
     private JTextField searchMem;
     private boolean changed;
     private final GUI frame = this;
+    private int currentIAR;
 
     private final Color backgroundColor = new Color(255, 255, 255, 255);
     private final Color activeColor = new Color(0, 0x90, 0xFF, 255);
+
+    private final Color iarColor = new Color(0x80, 0xc0, 0x80, 255);
     private final Color borderColor = new Color(0, 0, 0, 255);
 
     /**
@@ -1061,8 +1063,12 @@ public class GUI extends JFrame {
             active.add(elements.get("yIn"));
             active.add(elements.get("y"));
         }
-        if (Pr)
+        if (Pr) {
             active.add(elements.get("iarIn"));
+            memoryTable.setValueAt(toHex(currentIAR, 5), currentIAR, 0);
+            currentIAR = getNum(elements.get("iar").getText());
+            memoryTable.setValueAt(toHex(currentIAR, 5) + " (IAR)", currentIAR, 0);
+        }
 
         if (Ir)
             active.add(elements.get("irIn"));
