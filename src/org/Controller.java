@@ -58,8 +58,21 @@ public class Controller {
      *            arguments given by the console
      */
     public Controller(final String[] args) {
-        ls = new LoadingScreen();
-        ls.start();
+        auto_run = false;
+        mem_start = 0;
+        mem_end = 0;
+        if (args.length > 1) {
+            assert args.length > 2;
+            auto_run = true;
+            mem_start = Integer.decode(args[1]);
+            mem_end = Integer.decode(args[2]);
+        }
+        if (!auto_run) {
+            ls = new LoadingScreen();
+            ls.start();
+        } else {
+            ls = null;
+        }
 
         // Ignore file ending since it should be the choice of the user
         // if ((args.length > 0)
@@ -72,15 +85,6 @@ public class Controller {
                 System.err.println("File doesn't exist!");
             }
         }
-        auto_run = false;
-        mem_start = 0;
-        mem_end = 0;
-        if (args.length > 1) {
-            assert args.length>2;
-            auto_run=true;
-            mem_start = Integer.decode(args[1]);
-            mem_end = Integer.decode(args[2]);
-        }
 
         if (!auto_run) {
             gui = new GUI(this);
@@ -88,8 +92,8 @@ public class Controller {
             gui = null;
         }
         initMima();
-        ls.stop();
         if (!auto_run) {
+            ls.stop();
             gui.setVisible(true);
             clock = new Clock(500, sw);
             clock.pause(true);
@@ -111,6 +115,7 @@ public class Controller {
                 System.out.println("0x"+String.format("%06X", speicher.getMemory().getOrDefault(i, 0)));
             }
         }
+        return;
     }
 
     private void initMima() {
