@@ -42,6 +42,14 @@ java -classpath bin org.Mima
 The internal memory can be edited by clicking the edit memory button.
 One can load MiMa-Assembly-Code by either passing the file as command line argument or by the use of the "load assembly" button.
 
+### Command Line Mode
+If one is just interested in the memory contents after the execution of some assembler code one can use the tool as follows:
+```shell
+java -jar MiMaSimu.jar <assemly_file>.mima <hex_memory_start> <hex_memory_end>
+```
+This will load the MiMa code and execute it.
+For example, `java -jar MiMaSimu.jar test.mima 0x70 0x7F` will run `test.mima` and return the memory contents of position `0x70` up to position `0x7F`.
+
 ### Assembly notation
 #### Numbers
 All numbers are being notated in HEX-Code

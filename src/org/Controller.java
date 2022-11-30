@@ -66,6 +66,7 @@ public class Controller {
             auto_run = true;
             mem_start = Integer.decode(args[1]);
             mem_end = Integer.decode(args[2]);
+            assert mem_start <= mem_end;
         }
         if (!auto_run) {
             ls = new LoadingScreen();
