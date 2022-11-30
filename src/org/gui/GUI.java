@@ -42,6 +42,10 @@ public class GUI extends JFrame {
 
     private static final long serialVersionUID = -4470963446194084878L;
 
+    public static final String OPCODES[] = {"LDC", "DS", "LDV", "STV", "ADD", "AND",
+            "OR", "XOR", "EQL", "JMP", "JMN", "LDIV", "STIV", "JMS", "JIND" };
+
+
     private Controller controller;
     private JPanel content;
     private JPanel dataContent;
@@ -164,9 +168,9 @@ public class GUI extends JFrame {
             }
         });
 
-        this.pack();
-        this.setResizable(false);
+       // this.setResizable(false);
         this.setLocationRelativeTo(null);
+        this.pack();
     }
 
     private void addContent() {
@@ -195,16 +199,18 @@ public class GUI extends JFrame {
     }
 
     private void addMemoryTable() {
-        memoryTable = new JTable(0xFFFFF + 1, 2);
+        memoryTable = new JTable(0xFFFFF + 1, 3);
         memoryTable.setVisible(true);
         memoryTable.setPreferredScrollableViewportSize(new Dimension(300, 400));
         memoryTable.setFillsViewportHeight(true);
         memoryTable.setSelectionBackground(activeColor);
         memoryTable.getColumnModel().getColumn(0).setHeaderValue("Address");
-        memoryTable.getColumnModel().getColumn(1).setHeaderValue("Hex-value");
+        memoryTable.getColumnModel().getColumn(1).setHeaderValue("Hex value");
+        memoryTable.getColumnModel().getColumn(2).setHeaderValue("Opcode");
         for (int i = 0; i <= 0xFFFFF; i++) {
             memoryTable.setValueAt(toHex(i, 5), i, 0);
             memoryTable.setValueAt(toHex(0, 6), i, 1);
+            memoryTable.setValueAt(toOpcode(0), i, 2);
         }
 
         scrollPanel = new JScrollPane(memoryTable);
@@ -230,6 +236,24 @@ public class GUI extends JFrame {
             }
         });
 
+    }
+
+    private String toOpcode(int arg) {
+        int idx = arg >> 20;
+        if(idx < 15) {
+            return OPCODES[idx] +  " " + toHex(arg, 5);
+        } else {
+            switch (arg >> 16) {
+                case 0xf0:
+                    return "HALT";
+                case 0xf1:
+                    return "NOT";
+                case 0xf2:
+                    return "RAR";
+                default:
+                    return "(no valid opcode)";
+            }
+        }
     }
 
     private void addLabels() {
@@ -585,7 +609,7 @@ public class GUI extends JFrame {
         buttons.put("saveRes", tmp);
 
         for (final JButton button : buttons.values()) {
-            button.setSize(110, 30);
+            button.setSize(135, 30);
             button.setVisible(true);
             dataContent.add(button);
         }
@@ -1134,6 +1158,7 @@ public class GUI extends JFrame {
 
         for (final int key : memory.keySet()) {
             memoryTable.setValueAt(toHex(memory.get(key), 6), key, 1);
+            memoryTable.setValueAt(toOpcode(memory.get(key)), key, 2);
         }
     }
 
@@ -1146,6 +1171,7 @@ public class GUI extends JFrame {
 
         for (final int key : memory.keySet()) {
             memoryTable.setValueAt(toHex(0, 6), key, 1);
+            memoryTable.setValueAt(toOpcode(0), key, 2);
         }
     }
 
