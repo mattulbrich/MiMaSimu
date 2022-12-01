@@ -1,9 +1,12 @@
 package org.components;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import org.Controller;
 import org.external.Memory;
+
+import javax.swing.*;
 
 import static java.lang.Thread.sleep;
 
@@ -43,6 +46,23 @@ public class SW {
 		initMikrobefehle();
 		initJumpAddresses();
 		next = 0;
+	}
+
+	/**
+	 * This code updates a lot of swing entities. However, they must only be
+	 * modified from the AWT event queue.
+	 *
+	 * Since there are quite some glitches in the graphics, we should better
+	 * do this on the GUI thread to be safe.
+	 *
+	 * This is computationally lightweight, so no performance issues here.
+	 */
+	public void clockOnGUIThread() {
+		try {
+			SwingUtilities.invokeAndWait(this::clock);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void clock() {

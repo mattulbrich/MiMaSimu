@@ -26,13 +26,13 @@ public class Clock implements Runnable {
 		}
 		while (!stopped) {
 			if (!paused) {
-				sw.clock();
+				sw.clockOnGUIThread();
 				sleep(timeout / 2);
 				sw.clockOff();
 				sleep(timeout / 2);
 			} else if (runMacro) {
 				do {
-					sw.clock();
+					sw.clockOnGUIThread();
 					sleep(timeout / 2);
 					sw.clockOff();
 					sleep(timeout / 2);

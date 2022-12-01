@@ -199,7 +199,7 @@ public class Controller {
      * toggle clock manually
      */
     public void manualClock() {
-        sw.clock();
+        sw.clockOnGUIThread();
         clock(false);
     }
 
