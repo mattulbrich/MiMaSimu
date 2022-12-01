@@ -24,7 +24,7 @@ public class CodewordConverter implements ProcessingActivity {
     private static String unnecessaryRegex = "^\\s*0x([0-9a-fA-F]{1,5})(\\s+)(DS)?(\\s*)$";
     private static Pattern unnecessaryPattern = Pattern.compile(unnecessaryRegex);
 
-    private static String commandRegex = "^\\s*0x([0-9a-fA-F]{1,5})\\s+([A-Z]+)(\\s+0x([0-9a-fA-F]{1,5}))?\\s*$";
+    private static String commandRegex = "^\\s*0x([0-9a-fA-F]{1,5})\\s+([A-Z]+)(\\s+(0x[0-9a-fA-F]{1,5}|[0-9]+))?\\s*$";
     private static Pattern commandPattern = Pattern.compile(commandRegex);
 
     @Override
@@ -64,7 +64,7 @@ public class CodewordConverter implements ProcessingActivity {
                 // System.out.println(line);
                 if (curCommand.group(4) != null) {
                     line = "0x" + curCommand.group(1) + " 0x"
-                            + Integer.toHexString(commandCode + Integer.parseInt(curCommand.group(4), 16));
+                            + Integer.toHexString(commandCode + Integer.decode(curCommand.group(4)));
                 } else {
                     line = "0x" + curCommand.group(1) + " 0x" + Integer.toHexString(commandCode);
                 }
