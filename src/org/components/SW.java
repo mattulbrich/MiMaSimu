@@ -176,6 +176,10 @@ public class SW {
 		if (next == 0x5A) {
 			controller.pause(true);
 		}
+
+		if (next == 0x00) {
+			controller.printReport();
+		}
 	}
 
 	private int decode() {

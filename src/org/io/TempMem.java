@@ -1,8 +1,12 @@
 package org.io;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class TempMem {
+
+    private static final Map<Integer, String> namedAddresses = new HashMap<>();
 
     private static String text = "";
 
@@ -34,5 +38,17 @@ public class TempMem {
             }
             text += "\n";
         }
+    }
+
+    public static void addNamedAddress(int adr, String name) {
+        namedAddresses.put(adr, name);
+    }
+
+    public static String getNamedAddress(int adr) {
+        return namedAddresses.get(adr);
+    }
+
+    public static void clearNamdAddresses() {
+        namedAddresses.clear();
     }
 }

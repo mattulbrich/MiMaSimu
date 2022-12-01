@@ -238,7 +238,7 @@ public class GUI extends JFrame {
 
     }
 
-    private String toOpcode(int arg) {
+    public static String toOpcode(int arg) {
         int idx = arg >> 20;
         if(idx < 15) {
             return OPCODES[idx] +  " " + toHex(arg, 5);
@@ -1189,7 +1189,7 @@ public class GUI extends JFrame {
         elements.get("takt").setActive(active);
     }
 
-    private String toHex(final int value, final int length) {
+    private static String toHex(final int value, final int length) {
         String hex = Integer.toHexString(value);
 
         while (hex.length() > length) {

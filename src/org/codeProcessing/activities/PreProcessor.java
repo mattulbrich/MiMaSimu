@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.codeProcessing.ProcessingActivity;
 import org.codeProcessing.ProcessingDataCollection;
+import org.io.TempMem;
 
 public class PreProcessor implements ProcessingActivity {
 
@@ -31,7 +32,9 @@ public class PreProcessor implements ProcessingActivity {
             if (matcher.matches() && !input.isKeyword(matcher.group(2))) {
                 // System.out.println(matcher.group(1));
                 preFile.add("0x" + matcher.group(1) + " " + matcher.group(3));
-                variables.put(matcher.group(2), Integer.parseInt(matcher.group(1), 16));
+                int adr = Integer.parseInt(matcher.group(1), 16);
+                variables.put(matcher.group(2), adr);
+                TempMem.addNamedAddress(adr, matcher.group(2));
             } else {
                 // System.out.println("No match found:" + line);
                 preFile.add(line);

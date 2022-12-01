@@ -48,6 +48,7 @@ public class Controller {
     private final LoadingScreen ls;
 
     private boolean auto_run;
+    private boolean verbose;
     private int mem_start;
     private int mem_end;
 
@@ -61,12 +62,26 @@ public class Controller {
         auto_run = false;
         mem_start = 0;
         mem_end = 0;
-        if (args.length > 1) {
-            assert args.length > 2;
+        if (args.length > 2) {
             auto_run = true;
-            mem_start = Integer.decode(args[1]);
-            mem_end = Integer.decode(args[2]);
+            try {
+                int m1 = Integer.decode(args[1]);
+                int m2 = Integer.decode(args[2]);
+                mem_start = Math.min(m1, m2);
+                mem_end = Math.max(m1, m2);
+            } catch (NumberFormatException exception) {
+                System.err.printf("Cannot parse one of the addresses %s and %s as numbers%n", args[1], args[2]);
+                System.exit(1);
+            }
             assert mem_start <= mem_end;
+            if(args.length > 3) {
+                if (args[3].equals("debug")) {
+                    verbose = true;
+                } else {
+                    System.err.println("Unknown argument '" + args[3] + "'. Ignoring it");
+                    System.exit(1);
+                }
+            }
         }
         if (!auto_run) {
             ls = new LoadingScreen();
@@ -111,10 +126,7 @@ public class Controller {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            for (int i = mem_start; i <= mem_end; i++) {
-                System.out.print("0x"+String.format("%05X: ", i));
-                System.out.println("0x"+String.format("%06X", speicher.getMemory().getOrDefault(i, 0)));
-            }
+            printMemory();
         }
         return;
     }
@@ -250,6 +262,7 @@ public class Controller {
      *            memory file
      */
     public void loadMem(final File file) {
+        TempMem.clearNamdAddresses();
         TempMem.setText(Input.loadFile(file));
     }
 
@@ -293,4 +306,29 @@ public class Controller {
         Output.saveFile(file, speicher.getState());
     }
 
+    public void printReport() {
+        if (!auto_run || !verbose) {
+            return;
+        }
+
+        System.out.println("-------------------------------");
+        System.out.println("Registers:");
+        System.out.printf(" Akku: 0x%06X", akku.getValue());
+        System.out.printf(" IAR:  0x%05X     IR: 0x%06X (%s)%n", iar.getValue(), ir.getValue(), GUI.toOpcode(ir.getValue()));
+        printMemory();
+    }
+
+
+    private void printMemory() {
+        System.out.println("Memory:");
+        for (int adr = mem_start; adr <= mem_end; adr++) {
+            String nameOpt = TempMem.getNamedAddress(adr);
+            System.out.printf("0x%05X: 0x%06X", adr,
+                    speicher.getMemory().getOrDefault(adr, 0));
+            if (nameOpt != null) {
+                System.out.print(" (" + nameOpt + ")");
+            }
+            System.out.println();
+        }
+    }
 }
